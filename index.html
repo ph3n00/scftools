@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCF Calc</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- START: Theme Toggle Button -->
+    <div class="theme-switch-wrapper">
+        <button id="theme-toggle" aria-label="Toggle light/dark theme">Switch Theme</button>
+    </div>
+    <div class="container">
+
+        <!-- Balance Calculator -->
+        <div class="calculator">
+            <h2>Balance Calculator</h2>
+            <!-- <p class="info">Estimates the initial margin required to sustain a position given its size, entry, and liquidation price.</p> -->
+            <form id="balance-form">
+                <!-- START: New Radio Buttons and Input Field -->
+                <div class="input-group input-type-selector">
+                    <label>Position Size Input Type:</label>
+                    <div>
+                        <input type="radio" id="input-type-base" name="pos_size_type" value="base" checked>
+                        <label for="input-type-base">Quantity</label>
+                    </div>
+                        <div>
+                        <input type="radio" id="input-type-quote" name="pos_size_type" value="quote">
+                        <label for="input-type-quote">USDT</label>
+                    </div>
+                </div>
+
+                <div class="input-group" id="pos-size-base-group">
+                    <label for="pos-size-bal">Quantity:</label>
+                    <input type="number" id="pos-size-bal" step="any" placeholder="e.g., 0.1" required>
+                </div>
+
+                    <div class="input-group" id="pos-size-quote-group" style="display: none;"> <!-- Initially hidden -->
+                    <label for="pos-size-quote">Position Size (USDT):</label>
+                    <input type="number" id="pos-size-quote" step="any" placeholder="e.g., 5000" required>
+                </div>
+                <!-- END: New Radio Buttons and Input Field -->
+
+                <div class="input-group">
+                    <label for="entry-price-bal">Entry Price:</label>
+                    <input type="number" id="entry-price-bal" step="any" placeholder="e.g., 50000" required>
+                </div>
+                <div class="input-group">
+                    <label for="liq-price-bal">Liquidation Price:</label>
+                    <input type="number" id="liq-price-bal" step="any" placeholder="e.g., 45000" required>
+                </div>
+                <button type="submit">Calculate Balance</button>
+            </form>
+            <div id="balance-results" class="results">
+                <!-- Results will appear here -->
+            </div>
+        </div>
+
+        <!-- Risk Calculator -->
+        <div class="calculator">
+            <h2>Risk Calculator</h2>
+            <form id="risk-form">
+                <!-- START: New Risk Input Selection -->
+                <div class="input-group input-type-selector">
+                    <label>Define Risk By:</label>
+                    <div>
+                        <input type="radio" id="risk-input-type-amount" name="risk_input_type" value="amount" checked>
+                        <label for="risk-input-type-amount">Fixed Amount ($)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="risk-input-type-percent" name="risk_input_type" value="percent">
+                        <label for="risk-input-type-percent">Balance Percentage (%)</label>
+                    </div>
+                </div>
+
+                <!-- Input for Fixed Amount -->
+                <div class="input-group" id="risk-amount-group">
+                    <label for="risk-amount">Amount to Risk ($):</label>
+                    <input type="number" id="risk-amount" step="any" placeholder="e.g., 100" required>
+                </div>
+
+                <!-- Inputs for Percentage of Balance -->
+                <div id="risk-percent-inputs-group" style="display: none;"> <!-- Hidden by default -->
+                    <div class="input-group">
+                        <label for="account-balance">Account Balance ($):</label>
+                        <input type="number" id="account-balance" step="any" placeholder="e.g., 5000" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="risk-percent">Risk Percentage (%):</label>
+                        <input type="number" id="risk-percent" step="any" placeholder="e.g., 2" min="0" max="100" required>
+                    </div>
+                </div>
+                <!-- END: New Risk Input Selection -->
+
+                <div class="input-group">
+                    <label for="entry-price-risk">Entry Price:</label>
+                    <input type="number" id="entry-price-risk" step="any" placeholder="e.g., 50000" required>
+                </div>
+                <div class="input-group">
+                    <label for="tp-price">Take Profit Price:</label>
+                    <input type="number" id="tp-price" step="any" placeholder="e.g., 55000" required>
+                </div>
+                 <div class="input-group">
+                    <label for="sl-price">Stop Loss Price:</label>
+                    <input type="number" id="sl-price" step="any" placeholder="e.g., 49000" required>
+                </div>
+                 <div class="input-group">
+                    <label for="leverage">Leverage:</label>
+                    <input type="number" id="leverage" step="any" placeholder="e.g., 10" min="1" required>
+                </div>
+                <button type="submit">Calculate Risk Metrics</button>
+            </form>
+             <div id="risk-results" class="results">
+                 <!-- Results will appear here -->
+            </div>
+        </div>
+
+        <!-- PnL & R:R Calculator -->
+        <div class="calculator">
+            <h2>PnL Calculator</h2>
+            <!-- <p class="info">Calculates potential Profit/Loss and Risk/Reward based on your defined position size, entry, TP, and SL.</p> -->
+            <form id="pnl-form">    
+                <!-- Position Size Input Selection -->
+                <div class="input-group input-type-selector">
+                    <label>Position Size Input Type:</label>
+                    <div>
+                        <input type="radio" id="pnl-input-type-base" name="pnl_pos_size_type" value="base" checked>
+                        <label for="pnl-input-type-base">Quantity</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="pnl-input-type-quote" name="pnl_pos_size_type" value="quote">
+                        <label for="pnl-input-type-quote">USDT</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="pnl-input-type-margin" name="pnl_pos_size_type" value="margin">
+                        <label for="pnl-input-type-margin">Margin + Leverage</label>
+                    </div>
+                    <!-- START: New Radio Button for Balance Percent -->
+                    <div>
+                        <input type="radio" id="pnl-input-type-balpercent" name="pnl_pos_size_type" value="balpercent">
+                        <label for="pnl-input-type-balpercent">Balance % + Leverage</label>
+                    </div>
+                     <!-- END: New Radio Button for Balance Percent -->
+                </div>
+
+                <!-- Position Size Input Fields -->
+                <div class="input-group" id="pnl-pos-size-base-group">
+                    <label for="pnl-pos-size-base">Position Size (Quantity):</label>
+                    <input type="number" id="pnl-pos-size-base" step="any" placeholder="e.g., 0.1" required>
+                </div>
+
+                <div class="input-group" id="pnl-pos-size-quote-group" style="display: none;">
+                    <label for="pnl-pos-size-quote">Position Size (USDT):</label>
+                    <input type="number" id="pnl-pos-size-quote" step="any" placeholder="e.g., 5000" required>
+                </div>
+
+                <div class="input-group" id="pnl-pos-size-margin-group" style="display: none;">
+                    <div class="input-group">
+                        <label for="pnl-margin-amount">Margin:</label>
+                        <input type="number" id="pnl-margin-amount" step="any" placeholder="e.g., 500" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="pnl-leverage">Leverage:</label>
+                        <input type="number" id="pnl-leverage" step="any" placeholder="e.g., 10" min="1" required>
+                    </div>
+                </div>
+
+                <!-- START: New Input Group for Balance Percent -->
+                <div id="pnl-balpercent-group" style="display: none;"> <!-- Hidden by default -->
+                    <div class="input-group">
+                       <label for="pnl-account-balance">Balance:</label>
+                       <input type="number" id="pnl-account-balance" step="any" placeholder="e.g., 5000" required>
+                   </div>
+                    <div class="input-group">
+                       <label for="pnl-margin-percent">Percentage:</label>
+                       <input type="number" id="pnl-margin-percent" step="any" placeholder="e.g., 5" min="0" max="100" required>
+                   </div>
+                    <div class="input-group">
+                       <label for="pnl-balpercent-leverage">Leverage:</label>
+                       <input type="number" id="pnl-balpercent-leverage" step="any" placeholder="e.g., 10" min="1" required>
+                   </div>
+               </div>
+               <!-- END: New Input Group for Balance Percent -->
+
+                <!-- Common Trade Parameters -->
+                <div class="input-group">
+                    <label for="entry-price-pnl">Entry Price:</label>
+                    <input type="number" id="entry-price-pnl" step="any" placeholder="e.g., 50000" required>
+                </div>
+                    <div class="input-group">
+                    <label for="tp-price-pnl">Take Profit Price:</label>
+                    <input type="number" id="tp-price-pnl" step="any" placeholder="e.g., 55000" required>
+                </div>
+                    <div class="input-group">
+                    <label for="sl-price-pnl">Stop Loss Price:</label>
+                    <input type="number" id="sl-price-pnl" step="any" placeholder="e.g., 49000" required>
+                </div>
+
+                <button type="submit">Calculate PnL / R:R</button>
+            </form>
+            <div id="pnl-results" class="results">
+                    <!-- Results will appear here -->
+            </div>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,369 @@
+/* --- Base Variables (Light Mode Defaults) --- */
+:root {
+    --bg-primary: #f4f7f6;        /* Page background */
+    --bg-secondary: #ffffff;      /* Calculator background */
+    --bg-tertiary: #fff5e6;        /* Light orange results background */
+    --bg-accent: #f9f9f9;         /* Input type selector background */
+    --bg-disclaimer: #fadedb;
+
+    --text-primary: #333;         /* Main text */
+    --text-secondary: #555;       /* Info text */
+    --text-headings: #2c3e50;     /* H1, H2 */
+    --text-labels: #34495e;       /* Input labels */
+    --text-results: #4d3300;      /* Dark orange/brown results text */
+    --text-results-strong: #D35400;/* Strong orange results text (Pumpkin) */
+    --text-button: #ffffff;
+
+    --border-primary: #ccc;       /* Input borders */
+    --border-secondary: #eee;     /* Divider borders */
+    --border-results: #ffe0b3;    /* Lighter orange results border */
+    --border-disclaimer: #e74c3c;
+
+    --button-bg: #FF8C00;         /* Button background (DarkOrange) */
+    --button-glow: #00000028;
+    --button-bg-hover: #E67E22;   /* Button hover (Carrot) */
+    --accent-color: #FF8C00;      /* Radio buttons, focus (DarkOrange) */
+
+    --error-text: #c0392b;
+    --error-text-disclaimer: #e74c3c; /* Slightly different red for disclaimer */
+
+    --success-color: #28a745; /* Bootstrap success green */
+    --danger-color: #dc3545;  /* Bootstrap danger red */
+
+    --shadow-color: rgba(0, 0, 0, 0.1);
+
+    /* RGB value for the light mode accent color (#FF8C00) */
+    --accent-color-rgb: 255, 140, 0;
+}
+
+/* --- Dark Mode Variables --- */
+body.dark-mode {
+    --bg-primary: #111111;        /* Dark background */
+    --bg-secondary: #1a1a1a;      /* Slightly lighter card */
+    --bg-tertiary: #2a2a2a;        /* Dark orange results background */
+    --bg-accent: #2a2a2a;         /* Darker input type */
+    --bg-disclaimer: #5e3a35;     /* Dark red bg */
+
+    --text-primary: #ecf0f1;      /* Light grey/white text */
+    --text-secondary: #bbbbbb;    /* Lighter grey info */
+    --text-headings: #ffffff;     /* White headings */
+    --text-labels: #ecf0f1;       /* Light labels */
+    --text-results: #ffcc80;      /* Light orange results text */
+    --text-results-strong: #F5B041;/* Lighter orange strong text */
+    --text-button: #ffffff;       /* Keep button text white usually */
+
+    --border-primary: #333333;    /* Grey borders */
+    --border-secondary: #333333;  /* Darker grey dividers */
+    --border-results: #404040;    /* Dark orange results border */
+    --border-disclaimer: #e74c3c; /* Keep red border noticeable */
+
+    --button-bg: #F39C12;         /* Button background (Orange) */
+    --button-glow: #f39d126c;
+    --button-bg-hover: #F5B041;   /* Button hover (Lighter Orange) */
+    --accent-color: #F39C12;      /* Radio button color (Orange) */
+
+    --error-text: #f1948a;         /* Lighter red error */
+    --error-text-disclaimer: #f1948a; /* Lighter red for disclaimer text */
+
+    --success-color: #00d26a; /* Brighter green for dark mode */
+    --danger-color: #ff4d4d;  /* Brighter red for dark mode */
+
+    --shadow-color: rgba(42, 42, 42, 0.3); /* Maybe slightly darker shadow */
+
+    /* RGB value for the dark mode accent color (#F39C12) */
+    --accent-color-rgb: 243, 156, 18;
+}
+
+/* --- Apply Variables --- */
+
+body {
+    font-family: 'DM Sans 14pt Medium', sans-serif; /* Ensure you import DM Sans or use a fallback */
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: var(--bg-primary); /* Use variable */
+    color: var(--text-primary);         /* Use variable */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+}
+
+h1, h2 {
+    text-align: center;
+    color: var(--text-headings); /* Use variable */
+}
+
+.results-divider {
+    height: 1px;
+    border-width: 0;
+    color: var(--border-results); /* Fallback for older browsers */
+    background-color: var(--border-results); /* Modern browsers */
+    margin: 10px 0; /* Add some vertical space */
+}
+
+.disclaimer {
+    text-align: center;
+    font-size: 0.9em;
+    color: var(--error-text-disclaimer);    /* Use variable */
+    background-color: var(--bg-disclaimer); /* Use variable */
+    padding: 10px;
+    border-radius: 5px;
+    margin: 15px auto; /* Center horizontally */
+    margin-bottom: 20px;
+    border: 1px solid var(--border-disclaimer); /* Use variable */
+    max-width: 1160px; /* Align width with container */
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    max-width: 1800px; /* You increased this */
+    margin: 20px auto;
+}
+
+.calculator {
+    background-color: var(--bg-secondary); /* Use variable */
+    border: 1px solid var(--border-primary);
+    padding: 25px;
+    border-radius: 24px;
+    box-shadow: 0 0 10px var(--shadow-color); /* Use variable */
+    flex: 1;
+    min-width: 300px;
+    max-width: 650px; /* Adjusted width example */
+    box-sizing: border-box;
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.calculator h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--border-secondary); /* Use variable */
+    padding-bottom: 10px;
+    color: var(--text-headings); /* Use variable */
+}
+
+.info {
+    font-size: 0.9em;
+    color: var(--text-secondary); /* Use variable */
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--text-labels); /* Use variable */
+}
+
+.input-group input[type="number"] {
+    font-family: 'DM Sans 14pt Medium', sans-serif;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-primary); /* Use variable */
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-size: 1em;
+    background-color: var(--bg-secondary); /* Match card background */
+    color: var(--text-primary);          /* Use primary text color */
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Style inputs focused */
+.input-group input[type="number"]:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(var(--accent-color-rgb), 0.3); /* Use RGB for alpha with the NEW orange RGB */
+}
+
+/* (No need for separate dark/light mode here, handled by variable redefinition above) */
+
+button {
+    font-family: 'DM Sans 14pt Medium', sans-serif; /* Ensure you import DM Sans or use a fallback */
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: var(--button-bg); /* Use variable */
+    color: var(--text-button);        /* Use variable */
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0px 7px var(--button-glow);
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: var(--button-bg-hover); /* Use variable */
+    box-shadow: none;
+    transform: scale(0.98);
+}
+
+.results {
+    margin-top: 25px;   
+    padding: 15px;
+    background-color: var(--bg-tertiary); /* Use variable */
+    border-radius: 10px;
+    border: 1px solid var(--border-results); /* Use variable */
+    min-height: 50px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.results p {
+    margin: 8px 0;
+    font-size: 1em;
+    color: var(--text-results); /* Use variable */
+}
+
+.results strong {
+    color: var(--text-results-strong); /* Use variable */
+}
+
+.results .error {
+    color: var(--error-text); /* Use variable */
+    font-weight: bold;
+}
+
+/* --- Input Type Selector Specific --- */
+.input-type-selector {
+    margin-bottom: 20px;
+    border: 1px solid var(--border-secondary); /* Use variable */
+    padding: 10px;
+    border-radius: 10px;
+    background-color: var(--bg-accent); /* Use variable */
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.input-type-selector label { /* The main label "Position Size Input Type:" */
+    margin-bottom: 8px;
+    font-weight: bold; 
+    color: var(--text-labels); /* Use variable */
+}
+
+.input-type-selector div {
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.input-type-selector input[type="radio"] {
+   margin-right: 8px;
+   accent-color: var(--accent-color); /* Use variable (will be orange now) */
+   cursor: pointer;
+   width: auto;
+   padding: 0;
+}
+/* Target the labels NEXT TO the radio buttons in ALL calculators */
+.input-type-selector label[for^="input-type-"],   /* Balance Calc Radio Labels */
+.input-type-selector label[for^="risk-input-type-"], /* Risk Calc Radio Labels */
+.input-type-selector label[for^="pnl-input-type-base"], /* PnL Base Radio Label */
+.input-type-selector label[for^="pnl-input-type-quote"], /* PnL Quote Radio Label */
+.input-type-selector label[for^="pnl-input-type-margin"], /* PnL Margin Radio Label */
+.input-type-selector label[for^="pnl-input-type-balpercent"] { /* PnL Bal% Radio Label (ADDED) */
+    font-weight: normal; /* Override the general bold style */
+    color: var(--text-primary);
+    margin-bottom: 0; /* Remove bottom margin inherited from general label */
+    cursor: pointer;
+}
+
+.input-group.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* --- Theme Toggle Button Specific --- */
+.theme-switch-wrapper {
+    display: flex;
+    justify-content: right; /* Center button horizontally */
+    margin-bottom: 20px; /* Space below button */
+}
+
+#theme-toggle {
+    background-color: var(--button-bg); /* Use orange button variable */
+    color: var(--text-button);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px; /* Rounded pill shape */
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    width: auto; /* Override default button width */
+    margin-top: 0; /* Override default button margin */
+    transition: 0.3s;
+}
+
+#theme-toggle:hover {
+    background-color: var(--button-bg-hover); /* Use orange hover variable */
+    transform: scale(0.95);
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+    .container {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+    .calculator {
+        width: 95%;
+        max-width: none;
+    }
+     .disclaimer {
+        max-width: 95%;
+    }
+}
+
+/* --- Specific layout for Risk % Inputs --- */
+
+/* Target the container div holding the two inputs */
+#risk-percent-inputs-group {
+    display: flex;        /* Enable Flexbox layout */
+    gap: 15px;            /* Add space between the two input groups */
+    align-items: flex-start; /* Align items to the top (if they have different natural heights) */
+}
+
+/* Target the direct children (.input-group) within that container */
+#risk-percent-inputs-group > .input-group {
+    flex: 1;           /* Allow each group to grow and take up equal space */
+    /* margin-bottom: 0;  /* Remove the default bottom margin from these specific groups */
+}
+
+/* --- Specific layout for PnL Margin/Leverage Inputs --- */
+/* (Keep existing rules for #pnl-pos-size-margin-group) */
+#pnl-pos-size-margin-group {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+}
+#pnl-pos-size-margin-group > .input-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+/* --- Specific layout for PnL Balance Percent Inputs --- START */
+#pnl-balpercent-group {
+    display: flex;        /* Enable Flexbox layout */
+    gap: 15px;            /* Add space between the three input groups */
+    align-items: flex-start; /* Align items to the top */
+}
+
+/* Target the direct children (.input-group) within that container */
+#pnl-balpercent-group > .input-group {
+    flex: 1;           /* Allow each group to grow and take up equal space */
+    margin-bottom: 1;  /* Remove the default bottom margin from these specific groups */
+}
+/* --- Specific layout for PnL Balance Percent Inputs --- END */
+
+
+
+
+
