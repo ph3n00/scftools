@@ -78,6 +78,7 @@ body.dark-mode {
 
 body {
     font-family: 'DM Sans 14pt Medium', sans-serif; /* Ensure you import DM Sans or use a fallback */
+    font-size: 1rem;
     line-height: 1.6;
     margin: 0;
     padding: 20px;
@@ -129,6 +130,7 @@ h1, h2 {
     border-radius: 24px;
     box-shadow: 0 0 10px var(--shadow-color); /* Use variable */
     flex: 1;
+    /* min-height: 1000px; */
     min-width: 300px;
     max-width: 650px; /* Adjusted width example */
     box-sizing: border-box;
@@ -349,20 +351,16 @@ button:hover {
     margin-bottom: 0;
 }
 
-/* --- Specific layout for PnL Balance Percent Inputs --- START */
+/* --- Specific layout for PnL Balance Percent Inputs --- */
+/* (KEEP these rules as this group still has multiple items) */
 #pnl-balpercent-group {
-    display: flex;        /* Enable Flexbox layout */
-    gap: 15px;            /* Add space between the three input groups */
-    align-items: flex-start; /* Align items to the top */
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
 }
-
-/* Target the direct children (.input-group) within that container */
 #pnl-balpercent-group > .input-group {
-    flex: 1;           /* Allow each group to grow and take up equal space */
-    margin-bottom: 1;  /* Remove the default bottom margin from these specific groups */
+    flex: 1;
 }
-/* --- Specific layout for PnL Balance Percent Inputs --- END */
-
 
 
 
