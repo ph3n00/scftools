@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Display Results
              displayResults(balanceResultsDiv, `
-                <p><strong>Estimated Account Balance:</strong> $${estimatedMarginRequired.toFixed(0)}</p> 
+                <p><strong>Estimated Account Balance:</strong> $${estimatedMarginRequired.toFixed(2)}</p> 
                 <hr class="results-divider">
                 <p><strong>Quantity:</strong> ${posSizeBase.toFixed(6)}</p>
             `);
@@ -301,242 +301,210 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-    // --- Get Elements for PnL Calculator --- START
-    const pnlForm = document.getElementById('pnl-form');
-    const pnlResultsDiv = document.getElementById('pnl-results');
-    const pnlInputTypeBaseRadio = document.getElementById('pnl-input-type-base');
-    const pnlInputTypeQuoteRadio = document.getElementById('pnl-input-type-quote');
-    const pnlInputTypeMarginRadio = document.getElementById('pnl-input-type-margin');
-    const pnlInputTypeBalPercentRadio = document.getElementById('pnl-input-type-balpercent'); // Added
+ // --- Get Elements for PnL Calculator --- START (MODIFIED)
+ const pnlForm = document.getElementById('pnl-form');
+ const pnlResultsDiv = document.getElementById('pnl-results');
+ const pnlInputTypeBaseRadio = document.getElementById('pnl-input-type-base');
+ const pnlInputTypeQuoteRadio = document.getElementById('pnl-input-type-quote');
+ const pnlInputTypeMarginRadio = document.getElementById('pnl-input-type-margin');
+ const pnlInputTypeBalPercentRadio = document.getElementById('pnl-input-type-balpercent');
 
-    const pnlPosSizeBaseGroup = document.getElementById('pnl-pos-size-base-group');
-    const pnlPosSizeQuoteGroup = document.getElementById('pnl-pos-size-quote-group');
-    const pnlPosSizeMarginGroup = document.getElementById('pnl-pos-size-margin-group');
-    const pnlBalPercentGroup = document.getElementById('pnl-balpercent-group'); // Added
+ const pnlPosSizeBaseGroup = document.getElementById('pnl-pos-size-base-group');
+ const pnlPosSizeQuoteGroup = document.getElementById('pnl-pos-size-quote-group');
+ const pnlPosSizeMarginGroup = document.getElementById('pnl-pos-size-margin-group');
+ const pnlBalPercentGroup = document.getElementById('pnl-balpercent-group');
 
-    const pnlPosSizeBaseInput = document.getElementById('pnl-pos-size-base');
-    const pnlPosSizeQuoteInput = document.getElementById('pnl-pos-size-quote');
-    const pnlMarginAmountInput = document.getElementById('pnl-margin-amount');
-    const pnlLeverageInput = document.getElementById('pnl-leverage');
-    const pnlAccountBalanceInput = document.getElementById('pnl-account-balance'); // Added
-    const pnlMarginPercentInput = document.getElementById('pnl-margin-percent'); // Added
-    const pnlBalPercentLeverageInput = document.getElementById('pnl-balpercent-leverage'); // Added
-    // --- Get Elements for PnL Calculator --- END
+ const pnlPosSizeBaseInput = document.getElementById('pnl-pos-size-base');
+ const pnlPosSizeQuoteInput = document.getElementById('pnl-pos-size-quote');
+ const pnlMarginAmountInput = document.getElementById('pnl-margin-amount');
+ // Removed pnlLeverageInput (specific to margin group)
+ const pnlAccountBalanceInput = document.getElementById('pnl-account-balance');
+ const pnlMarginPercentInput = document.getElementById('pnl-margin-percent');
+ // Removed pnlBalPercentLeverageInput (specific to balpercent group)
 
-     // --- Toggle PnL Calculator Input Fields --- START (MODIFIED)
-     function togglePnlInputFields() {
-        // Added pnlBalPercentGroup to the array
-        const groups = [pnlPosSizeBaseGroup, pnlPosSizeQuoteGroup, pnlPosSizeMarginGroup, pnlBalPercentGroup];
-        const inputs = [
-            [pnlPosSizeBaseInput], // Inputs for Base group (Index 0)
-            [pnlPosSizeQuoteInput], // Inputs for Quote group (Index 1)
-            [pnlMarginAmountInput, pnlLeverageInput], // Inputs for Margin group (Index 2)
-             // Added inputs for Balance Percent group (Index 3)
-            [pnlAccountBalanceInput, pnlMarginPercentInput, pnlBalPercentLeverageInput]
-        ];
+ const pnlLeverageMainInput = document.getElementById('pnl-leverage-main'); // Added reference to main leverage input
+ // --- Get Elements for PnL Calculator --- END
 
-        let activeGroupIndex = 0; // Default to Base
-        if (pnlInputTypeQuoteRadio.checked) activeGroupIndex = 1;
-        else if (pnlInputTypeMarginRadio.checked) activeGroupIndex = 2;
-        else if (pnlInputTypeBalPercentRadio.checked) activeGroupIndex = 3; // Check for new radio
+ // ... (Keep other element getters, helper functions, theme toggler) ...
 
-        groups.forEach((group, index) => {
-            const isActive = index === activeGroupIndex;
+ // --- Toggle PnL Calculator Input Fields --- START (MODIFIED)
+ function togglePnlInputFields() {
+     const groups = [pnlPosSizeBaseGroup, pnlPosSizeQuoteGroup, pnlPosSizeMarginGroup, pnlBalPercentGroup];
+     // Updated inputs array - removed specific leverage inputs
+     const inputs = [
+         [pnlPosSizeBaseInput],                              // Base group (Index 0)
+         [pnlPosSizeQuoteInput],                             // Quote group (Index 1)
+         [pnlMarginAmountInput],                             // Margin group (Index 2) - only margin amount now
+         [pnlAccountBalanceInput, pnlMarginPercentInput]     // BalPercent group (Index 3) - only balance and percent now
+     ];
 
-            if (isActive) {
-                 // Use flex for Margin group (index 2) OR BalPercent group (index 3)
-                group.style.display = (index === 2 || index === 3) ? 'flex' : 'block';
-                group.classList.remove('disabled');
-            } else {
-                group.style.display = 'none'; // Hide inactive groups
-                group.classList.add('disabled');
-            }
+     let activeGroupIndex = 0; // Default to Base
+     if (pnlInputTypeQuoteRadio.checked) activeGroupIndex = 1;
+     else if (pnlInputTypeMarginRadio.checked) activeGroupIndex = 2;
+     else if (pnlInputTypeBalPercentRadio.checked) activeGroupIndex = 3;
 
-            // Manage required attribute and clear hidden inputs
-            inputs[index].forEach(input => {
-                input.required = isActive;
-                if (!isActive) {
-                    input.value = ''; // Clear value when hidden
-                }
-            });
-        });
-    }
+     groups.forEach((group, index) => {
+         const isActive = index === activeGroupIndex;
 
-    // Add event listeners to PnL radio buttons
-    pnlInputTypeBaseRadio.addEventListener('change', togglePnlInputFields);
-    pnlInputTypeQuoteRadio.addEventListener('change', togglePnlInputFields);
-    pnlInputTypeMarginRadio.addEventListener('change', togglePnlInputFields);
-    pnlInputTypeBalPercentRadio.addEventListener('change', togglePnlInputFields); // Added listener for new radio
+         if (isActive) {
+              // Use flex only for BalPercent group (index 3) as it's the only one with multiple side-by-side inputs left
+             group.style.display = (index === 3) ? 'flex' : 'block';
+             group.classList.remove('disabled');
+         } else {
+             group.style.display = 'none'; // Hide inactive groups
+             group.classList.add('disabled');
+         }
 
-    // Initial call for PnL calculator
-    togglePnlInputFields();
-    // --- Toggle PnL Calculator Input Fields --- END
+         // Manage required attribute and clear hidden inputs
+         inputs[index].forEach(input => {
+             input.required = isActive;
+             if (!isActive) {
+                 input.value = ''; // Clear value when hidden
+             }
+         });
+     });
 
-    // ... (Keep toggle functions for Balance and Risk Calcs) ...
+     // Also ensure the main leverage input is never disabled (optional step)
+     pnlLeverageMainInput.disabled = false;
+     pnlLeverageMainInput.closest('.input-group').classList.remove('disabled'); // Ensure parent isn't disabled visually
+ }
 
-    // --- Balance Calculator Logic ---
-    // ... (Keep existing balanceForm listener) ...
+ // Add event listeners to PnL radio buttons (no changes here)
+ pnlInputTypeBaseRadio.addEventListener('change', togglePnlInputFields);
+ pnlInputTypeQuoteRadio.addEventListener('change', togglePnlInputFields);
+ pnlInputTypeMarginRadio.addEventListener('change', togglePnlInputFields);
+ pnlInputTypeBalPercentRadio.addEventListener('change', togglePnlInputFields);
 
-    // --- Risk Calculator Logic ---
-    // ... (Keep existing riskForm listener) ...
+ // Initial call for PnL calculator (no changes here)
+ togglePnlInputFields();
+ // --- Toggle PnL Calculator Input Fields --- END
 
-    // --- PnL & R:R Calculator Logic --- START (MODIFIED)
-    pnlForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        pnlResultsDiv.innerHTML = ''; // Clear previous results
-
-        try {
-            // Read common inputs
-            const entryPrice = parseFloat(document.getElementById('entry-price-pnl').value);
-            const tpPrice = parseFloat(document.getElementById('tp-price-pnl').value);
-            const slPrice = parseFloat(document.getElementById('sl-price-pnl').value);
-
-             // Basic validation for common inputs
-            if (isNaN(entryPrice) || isNaN(tpPrice) || isNaN(slPrice)) {
-                throw new Error("Please enter valid numbers for Entry, TP, and SL prices.");
-            }
-            if (entryPrice <= 0) {
-                 throw new Error("Entry Price must be greater than zero.");
-            }
-            if (entryPrice === slPrice) {
-                throw new Error("Entry Price and Stop Loss Price cannot be the same.");
-            }
-             if (entryPrice === tpPrice) {
-                throw new Error("Entry Price and Take Profit Price cannot be the same.");
-            }
-
-            let positionSizeBase; // Quantity
-            let positionValueQuote; // USDT value of position
-            let inputLeverage = 1; // Leverage used (relevant for margin modes)
-            let marginUsed = null; // USDT amount used as margin (null if not calculated/specified)
-            let calculationMode = 'base'; // Track the input mode
-
-            // Determine Position Size based on selected input type
-            if (pnlInputTypeBaseRadio.checked) {
-                calculationMode = 'base';
-                positionSizeBase = parseFloat(pnlPosSizeBaseInput.value);
-                if (isNaN(positionSizeBase) || positionSizeBase <= 0) {
-                    throw new Error("Please enter a valid Position Size (Quantity) greater than zero.");
-                }
-                positionValueQuote = positionSizeBase * entryPrice;
-            } else if (pnlInputTypeQuoteRadio.checked) {
-                calculationMode = 'quote';
-                positionValueQuote = parseFloat(pnlPosSizeQuoteInput.value);
-                if (isNaN(positionValueQuote) || positionValueQuote <= 0) {
-                    throw new Error("Please enter a valid Position Size (USDT) greater than zero.");
-                }
-                positionSizeBase = positionValueQuote / entryPrice;
-                if (!isFinite(positionSizeBase) || positionSizeBase <= 0) {
-                     throw new Error("Calculated quantity is invalid. Check inputs.");
-                 }
-            } else if (pnlInputTypeMarginRadio.checked) { // Margin & Leverage input selected
-                calculationMode = 'margin';
-                marginUsed = parseFloat(pnlMarginAmountInput.value);
-                inputLeverage = parseFloat(pnlLeverageInput.value);
-
-                if (isNaN(marginUsed) || isNaN(inputLeverage)) {
-                    throw new Error("Please enter valid numbers for Margin and Leverage.");
-                }
-                 if (marginUsed <= 0) {
-                     throw new Error("Margin Amount must be greater than zero.");
-                 }
-                 if (inputLeverage < 1) {
-                     throw new Error("Leverage must be 1 or greater.");
-                 }
-
-                positionValueQuote = marginUsed * inputLeverage;
-                positionSizeBase = positionValueQuote / entryPrice;
-                 if (!isFinite(positionSizeBase) || positionSizeBase <= 0) {
-                     throw new Error("Calculated quantity is invalid. Check inputs.");
-                 }
-            } else if (pnlInputTypeBalPercentRadio.checked) { // Balance % as Margin input selected (NEW)
-                 calculationMode = 'balpercent';
-                 const accountBalance = parseFloat(pnlAccountBalanceInput.value);
-                 const marginPercent = parseFloat(pnlMarginPercentInput.value);
-                 inputLeverage = parseFloat(pnlBalPercentLeverageInput.value); // Use the leverage from this group
-
-                 if (isNaN(accountBalance) || accountBalance <= 0) {
-                     throw new Error("Please enter a valid Account Balance greater than zero.");
-                 }
-                 if (isNaN(marginPercent) || marginPercent <= 0 || marginPercent > 100) {
-                      throw new Error("Please enter a valid Margin Used Percentage between 0 and 100.");
-                 }
-                  if (isNaN(inputLeverage) || inputLeverage < 1) {
-                      throw new Error("Please enter valid Leverage of 1 or greater.");
-                  }
-
-                 marginUsed = accountBalance * (marginPercent / 100); // Calculate the margin amount
-                 if (marginUsed <= 0 || !isFinite(marginUsed)) {
-                      throw new Error("Calculated Margin Amount is invalid. Check Balance and Percentage.");
-                 }
-
-                 positionValueQuote = marginUsed * inputLeverage; // Calculate position value
-                 positionSizeBase = positionValueQuote / entryPrice; // Calculate quantity
-                 if (!isFinite(positionSizeBase) || positionSizeBase <= 0) {
-                      throw new Error("Calculated quantity is invalid. Check inputs.");
-                 }
-            } // End of input mode checks
+ // ... (Keep toggle functions for Balance and Risk Calcs) ...
+ // ... (Keep Balance Calculator Logic) ...
+ // ... (Keep Risk Calculator Logic) ...
 
 
-            // Determine Long/Short and validate SL/TP placement
-            let isLong = tpPrice > entryPrice;
-            if (isLong) {
-                if (slPrice >= entryPrice) throw new Error("For a Long trade, Stop Loss must be below Entry Price.");
-                if (tpPrice <= entryPrice) throw new Error("For a Long trade, Take Profit must be above Entry Price.");
-            } else { // isShort
-                 if (tpPrice >= entryPrice) throw new Error("For a Short trade, Take Profit must be below Entry Price.");
-                 if (slPrice <= entryPrice) throw new Error("For a Short trade, Stop Loss must be above Entry Price.");
-            }
+ // --- PnL & R:R Calculator Logic --- START (MODIFIED)
+ pnlForm.addEventListener('submit', (e) => {
+     e.preventDefault();
+     pnlResultsDiv.innerHTML = '';
 
-             // Calculate PnL amounts
-            const slDistance = Math.abs(entryPrice - slPrice);
-            const tpDistance = Math.abs(tpPrice - entryPrice);
+     try {
+         // Read common inputs
+         const entryPrice = parseFloat(document.getElementById('entry-price-pnl').value);
+         const tpPrice = parseFloat(document.getElementById('tp-price-pnl').value);
+         const slPrice = parseFloat(document.getElementById('sl-price-pnl').value);
 
-            const lossAtSl = positionSizeBase * slDistance;
-            const profitAtTp = positionSizeBase * tpDistance;
+         // ** Read Main Leverage Input (Always) and Handle Default **
+         let inputLeverage = parseFloat(pnlLeverageMainInput.value);
+         if (isNaN(inputLeverage) || inputLeverage < 1) {
+             inputLeverage = 1; // Default to 1x if empty or invalid
+         }
 
-            // Calculate Percentages (Default ROI, switch to ROE if margin was used/calculated)
-            let lossPercentage = (positionValueQuote > 0) ? (lossAtSl / positionValueQuote) * 100 : 0;
-            let profitPercentage = (positionValueQuote > 0) ? (profitAtTp / positionValueQuote) * 100 : 0;
-            let percentageType = 'ROI % based on Position Size';
+          // Basic validation for common inputs
+         if (isNaN(entryPrice) || isNaN(tpPrice) || isNaN(slPrice)) {
+             throw new Error("Please enter valid numbers for Entry, TP, and SL prices.");
+         }
+         if (entryPrice <= 0) throw new Error("Entry Price must be greater than zero.");
+         if (entryPrice === slPrice) throw new Error("Entry Price and Stop Loss Price cannot be the same.");
+         if (entryPrice === tpPrice) throw new Error("Entry Price and Take Profit Price cannot be the same.");
 
-            if (marginUsed !== null && marginUsed > 0) { // Check if margin was involved (either directly input or calculated)
-                 lossPercentage = (lossAtSl / marginUsed) * 100;
-                 profitPercentage = (profitAtTp / marginUsed) * 100;
-            }
+         let positionSizeBase; // Quantity
+         let positionValueQuote; // USDT value of position
+         let marginUsed = null; // USDT amount used as margin (null if not calculated/specified)
+         let calculationMode = 'base';
 
-            // Calculate R:R Ratio
-            const riskRewardRatio = (lossAtSl > 0) ? (profitAtTp / lossAtSl) : Infinity;
+         // Determine Position Size based on selected input type
+         if (pnlInputTypeBaseRadio.checked) {
+             calculationMode = 'base';
+             positionSizeBase = parseFloat(pnlPosSizeBaseInput.value);
+             if (isNaN(positionSizeBase) || positionSizeBase <= 0) throw new Error("Please enter a valid Quantity greater than zero.");
+             positionValueQuote = positionSizeBase * entryPrice;
 
+         } else if (pnlInputTypeQuoteRadio.checked) {
+             calculationMode = 'quote';
+             positionValueQuote = parseFloat(pnlPosSizeQuoteInput.value);
+             if (isNaN(positionValueQuote) || positionValueQuote <= 0) throw new Error("Please enter a valid Position Size (USDT) greater than zero.");
+             positionSizeBase = positionValueQuote / entryPrice;
+             if (!isFinite(positionSizeBase) || positionSizeBase <= 0) throw new Error("Calculated quantity is invalid. Check inputs.");
 
-            // Display Results
-            displayResults(pnlResultsDiv, `
-                <p><strong>Trade Direction:</strong> ${isLong ? '🟢 Long' : '🔴 Short'}</p>
-                ${ /* Conditionally show margin/leverage details if relevant mode was used */
-                    (calculationMode === 'margin' || calculationMode === 'balpercent')
-                    ? `
-                       <p><strong>Leverage:</strong> ${inputLeverage}x</p>`
-                    : ''
-                }
-                <p style="color: var(--success-color);"><strong>Expected Profit:</strong> $${profitAtTp.toFixed(2)} (+${profitPercentage.toFixed(2)}%)</p>
-                <p style="color: var(--danger-color);"><strong>Expected Loss:</strong> -$${lossAtSl.toFixed(2)} (-${lossPercentage.toFixed(2)}%)</p>
-                <p><strong>RR Ratio:</strong> 1 : ${isFinite(riskRewardRatio) ? riskRewardRatio.toFixed(2) : 'N/A'}</p>
-                <hr class="results-divider">
-                <p><strong>Quantity:</strong> ${positionSizeBase.toFixed(6)}</p>
-                <p><strong>Position Size (USDT):</strong> ${positionValueQuote.toFixed(2)}</p>
-                ${ /* Conditionally show margin/leverage details if relevant mode was used */
-                    (calculationMode === 'margin' || calculationMode === 'balpercent')
-                    ? `<p><strong>Margin Used:</strong> $${marginUsed !== null ? marginUsed.toFixed(2) : 'N/A'}</p>
-                       `
-                    : ''
-                }
-            `);
+         } else if (pnlInputTypeMarginRadio.checked) {
+             calculationMode = 'margin';
+             marginUsed = parseFloat(pnlMarginAmountInput.value); // Read only margin here
+             if (isNaN(marginUsed) || marginUsed <= 0) throw new Error("Please enter a valid Margin Amount greater than zero.");
+             // Leverage is read from the main input above
 
+             positionValueQuote = marginUsed * inputLeverage; // Use main leverage
+             positionSizeBase = positionValueQuote / entryPrice;
+             if (!isFinite(positionSizeBase) || positionSizeBase <= 0) throw new Error("Calculated quantity is invalid. Check inputs.");
 
-        } catch (error) {
-            displayResults(pnlResultsDiv, `<p class="error">Error: ${error.message}</p>`);
-        }
-    });
-     // --- PnL & R:R Calculator Logic --- END
+         } else if (pnlInputTypeBalPercentRadio.checked) {
+              calculationMode = 'balpercent';
+              const accountBalance = parseFloat(pnlAccountBalanceInput.value);
+              const marginPercent = parseFloat(pnlMarginPercentInput.value);
+              // Leverage is read from the main input above
+
+              if (isNaN(accountBalance) || accountBalance <= 0) throw new Error("Please enter a valid Account Balance greater than zero.");
+              if (isNaN(marginPercent) || marginPercent <= 0 || marginPercent > 100) throw new Error("Please enter a valid Margin Used Percentage between 0 and 100.");
+
+              marginUsed = accountBalance * (marginPercent / 100);
+              if (marginUsed <= 0 || !isFinite(marginUsed)) throw new Error("Calculated Margin Amount is invalid. Check Balance and Percentage.");
+
+              positionValueQuote = marginUsed * inputLeverage; // Use main leverage
+              positionSizeBase = positionValueQuote / entryPrice;
+              if (!isFinite(positionSizeBase) || positionSizeBase <= 0) throw new Error("Calculated quantity is invalid. Check inputs.");
+         }
+
+         // Determine Long/Short and validate SL/TP placement
+         let isLong = tpPrice > entryPrice;
+         // (Validation logic remains the same)
+         if (isLong) {
+             if (slPrice >= entryPrice) throw new Error("For a Long trade, Stop Loss must be below Entry Price.");
+             if (tpPrice <= entryPrice) throw new Error("For a Long trade, Take Profit must be above Entry Price.");
+         } else { // isShort
+              if (tpPrice >= entryPrice) throw new Error("For a Short trade, Take Profit must be below Entry Price.");
+              if (slPrice <= entryPrice) throw new Error("For a Short trade, Stop Loss must be above Entry Price.");
+         }
+
+         // Calculate PnL amounts
+         const slDistance = Math.abs(entryPrice - slPrice);
+         const tpDistance = Math.abs(tpPrice - entryPrice);
+         const lossAtSl = positionSizeBase * slDistance;
+         const profitAtTp = positionSizeBase * tpDistance;
+
+         // ** Calculate Required Margin (Always) **
+         const requiredMargin = (inputLeverage > 0) ? positionValueQuote / inputLeverage : positionValueQuote;
+
+         // Calculate Percentages (Default ROI, switch to ROE if margin was specified/calculated)
+         let lossPercentage = (positionValueQuote > 0) ? (lossAtSl / positionValueQuote) * 100 : 0;
+         let profitPercentage = (positionValueQuote > 0) ? (profitAtTp / positionValueQuote) * 100 : 0;
+
+         // Calculate R:R Ratio
+         const riskRewardRatio = (lossAtSl > 0) ? (profitAtTp / lossAtSl) : Infinity;
+
+         // Read Balance Percentage
+         const marginPercent = parseFloat(document.getElementById('pnl-margin-percent').value);
+
+         // Display Results (MODIFIED)
+         displayResults(pnlResultsDiv, `
+             <p><strong>Trade Direction:</strong> ${isLong ? '🟢 Long' : '🔴 Short'}</p>
+             <p><strong>Leverage:</strong> ${inputLeverage}x</p> <!-- Always show leverage -->
+             <p style="color: var(--success-color);"><strong>Expected Profit:</strong> $${profitAtTp.toFixed(2)} (+${(profitPercentage * inputLeverage).toFixed(2)}%)</p>
+             <p style="color: var(--danger-color);"><strong>Expected Loss:</strong> -$${lossAtSl.toFixed(2)} (-${(lossPercentage * inputLeverage).toFixed(2)}%)</p>
+             <p><strong>RR Ratio:</strong> 1 : ${isFinite(riskRewardRatio) ? riskRewardRatio.toFixed(2) : 'N/A'}</p>
+             <hr class="results-divider">
+             <p><strong>Quantity:</strong> ${positionSizeBase.toFixed(6)}</p>
+             <p><strong>Position Size (USDT):</strong> ${positionValueQuote.toFixed(2)}</p>
+             <p><strong>Margin:</strong> $${requiredMargin.toFixed(2)}</p> <!-- Always show margin -->
+             ${calculationMode == 'balpercent' ? `<hr class="results-divider">` : ''}
+             ${calculationMode == 'balpercent' ? `<p> ${marginPercent}% of available amount</p>` : ''}
+         `);
+
+     } catch (error) {
+         displayResults(pnlResultsDiv, `<p class="error">Error: ${error.message}</p>`);
+     }
+ });
+ // --- PnL & R:R Calculator Logic --- END
 
 }); // End DOMContentLoaded
+
