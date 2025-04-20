@@ -86,6 +86,8 @@ body {
     background-color: var(--bg-primary); /* Use variable */
     color: var(--text-primary);         /* Use variable */
     transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale; /* Often used alongside for Firefox on macOS */
 }
 
 h1, h2 {
