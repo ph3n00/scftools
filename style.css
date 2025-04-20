@@ -77,9 +77,10 @@ body.dark-mode {
 /* --- Apply Variables --- */
 
 body {
-    font-family: 'DM Sans 14pt Medium', sans-serif; /* Ensure you import DM Sans or use a fallback */
+    font-family: 'DM Sans', sans-serif; /* Ensure you import DM Sans or use a fallback */;
     font-size: 1rem;
     line-height: 1.6;
+    font-weight: 500;
     margin: 0;
     padding: 20px;
     background-color: var(--bg-primary); /* Use variable */
@@ -88,8 +89,9 @@ body {
 }
 
 h1, h2 {
+    font-weight: 700;
     text-align: center;
-    color: var(--text-headings); /* Use variable */
+    color: var(--text-headings);
 }
 
 .results-divider {
@@ -163,7 +165,7 @@ h1, h2 {
 }
 
 .input-group input[type="number"] {
-    font-family: 'DM Sans 14pt Medium', sans-serif;
+    font-family: inherit;
     width: 100%;
     padding: 10px;
     border: 1px solid var(--border-primary); /* Use variable */
@@ -185,8 +187,9 @@ h1, h2 {
 /* (No need for separate dark/light mode here, handled by variable redefinition above) */
 
 button {
-    font-family: 'DM Sans 14pt Medium', sans-serif; /* Ensure you import DM Sans or use a fallback */
+    font-family: inherit; /* Ensure you import DM Sans or use a fallback */
     display: block;
+    font-weight: 500;
     width: 100%;
     padding: 12px;
     background-color: var(--button-bg); /* Use variable */
@@ -268,7 +271,7 @@ button:hover {
 .input-type-selector label[for^="pnl-input-type-quote"], /* PnL Quote Radio Label */
 .input-type-selector label[for^="pnl-input-type-margin"], /* PnL Margin Radio Label */
 .input-type-selector label[for^="pnl-input-type-balpercent"] { /* PnL Bal% Radio Label (ADDED) */
-    font-weight: normal; /* Override the general bold style */
+    font-weight: 400; /* Override the general bold style */
     color: var(--text-primary);
     margin-bottom: 0; /* Remove bottom margin inherited from general label */
     cursor: pointer;
