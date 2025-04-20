@@ -4,7 +4,7 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCF Calc</title>
+    <title>SCF Tools</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -121,8 +121,7 @@
         <!-- PnL & R:R Calculator -->
         <div class="calculator">
             <h2>PnL Calculator</h2>
-            <!-- <p class="info">Calculates potential Profit/Loss and Risk/Reward based on your defined position size, entry, TP, and SL.</p> -->
-            <form id="pnl-form">    
+            <form id="pnl-form">
                 <!-- Position Size Input Selection -->
                 <div class="input-group input-type-selector">
                     <label>Position Size Input Type:</label>
@@ -136,68 +135,69 @@
                     </div>
                     <div>
                         <input type="radio" id="pnl-input-type-margin" name="pnl_pos_size_type" value="margin">
-                        <label for="pnl-input-type-margin">Margin + Leverage</label>
+                        <label for="pnl-input-type-margin">Margin</label> <!-- Removed + Leverage -->
                     </div>
-                    <!-- START: New Radio Button for Balance Percent -->
                     <div>
                         <input type="radio" id="pnl-input-type-balpercent" name="pnl_pos_size_type" value="balpercent">
-                        <label for="pnl-input-type-balpercent">Balance % + Leverage</label>
+                        <label for="pnl-input-type-balpercent">Balance %</label> <!-- Removed + Leverage -->
                     </div>
-                     <!-- END: New Radio Button for Balance Percent -->
                 </div>
 
-                <!-- Position Size Input Fields -->
+                <!-- Position Size Input Fields (Conditional) -->
                 <div class="input-group" id="pnl-pos-size-base-group">
                     <label for="pnl-pos-size-base">Quantity:</label>
-                    <input type="number" id="pnl-pos-size-base" step="any" placeholder="e.g., 0.1" required>
+                    <input type="number" id="pnl-pos-size-base" step="any" placeholder="e.g., 0.1" min="0" required>
                 </div>
 
                 <div class="input-group" id="pnl-pos-size-quote-group" style="display: none;">
                     <label for="pnl-pos-size-quote">Position Size (USDT):</label>
-                    <input type="number" id="pnl-pos-size-quote" step="any" placeholder="e.g., 5000" required>
+                    <input type="number" id="pnl-pos-size-quote" step="any" placeholder="e.g., 5000" min="0" required>
                 </div>
 
+                <!-- Margin input group - now only contains Margin amount -->
                 <div class="input-group" id="pnl-pos-size-margin-group" style="display: none;">
                     <div class="input-group">
                         <label for="pnl-margin-amount">Margin:</label>
-                        <input type="number" id="pnl-margin-amount" step="any" placeholder="e.g., 500" required>
+                        <input type="number" id="pnl-margin-amount" step="any" placeholder="e.g., 500" min="0" required>
                     </div>
-                    <div class="input-group">
-                        <label for="pnl-leverage">Leverage:</label>
-                        <input type="number" id="pnl-leverage" step="any" placeholder="e.g., 10" min="1" required>
-                    </div>
+                    <!-- Leverage input removed from here -->
                 </div>
 
-                <!-- START: New Input Group for Balance Percent -->
-                <div id="pnl-balpercent-group" style="display: none;"> <!-- Hidden by default -->
+                <!-- Balance % input group - now only contains Balance and % -->
+                <div id="pnl-balpercent-group" style="display: none;">
                     <div class="input-group">
                        <label for="pnl-account-balance">Balance:</label>
-                       <input type="number" id="pnl-account-balance" step="any" placeholder="e.g., 5000" required>
+                       <input type="number" id="pnl-account-balance" step="any" placeholder="e.g., 5000" min="0" required>
                    </div>
                     <div class="input-group">
                        <label for="pnl-margin-percent">Percentage:</label>
                        <input type="number" id="pnl-margin-percent" step="any" placeholder="e.g., 5" min="0" max="100" required>
                    </div>
-                    <div class="input-group">
-                       <label for="pnl-balpercent-leverage">Leverage:</label>
-                       <input type="number" id="pnl-balpercent-leverage" step="any" placeholder="e.g., 10" min="1" required>
-                   </div>
+                   <!-- Leverage input removed from here -->
                </div>
-               <!-- END: New Input Group for Balance Percent -->
 
                 <!-- Common Trade Parameters -->
                 <div class="input-group">
                     <label for="entry-price-pnl">Entry Price:</label>
-                    <input type="number" id="entry-price-pnl" step="any" placeholder="e.g., 50000" required>
+                    <input type="number" id="entry-price-pnl" step="any" placeholder="e.g., 50000" min="0" required>
                 </div>
-                    <div class="input-group">
+                <div class="input-group">
                     <label for="tp-price-pnl">Take Profit Price:</label>
-                    <input type="number" id="tp-price-pnl" step="any" placeholder="e.g., 55000" required>
+                    <input type="number" id="tp-price-pnl" step="any" placeholder="e.g., 55000" min="0" required>
                 </div>
-                    <div class="input-group">
+                <div class="input-group">
                     <label for="sl-price-pnl">Stop Loss Price:</label>
-                    <input type="number" id="sl-price-pnl" step="any" placeholder="e.g., 49000" required>
+                    <input type="number" id="sl-price-pnl" step="any" placeholder="e.g., 49000" min="0" required>
                 </div>
+
+                <!-- START: Moved Leverage Input -->
+                <div class="input-group">
+                    <label for="pnl-leverage-main">Leverage (Optional):</label>
+                    <!-- Changed ID, label, removed required, added placeholder -->
+                    <input type="number" id="pnl-leverage-main" step="any" placeholder="1x (Default)" min="1">
+                </div>
+                <!-- END: Moved Leverage Input -->
+
 
                 <button type="submit">Calculate PnL / R:R</button>
             </form>
